@@ -6,8 +6,8 @@ class GameState(IntEnum):
     ENDED = 2
     
 #screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
 SCREEN_CENTER = [int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2)]
 #tiles:
 TILE_SIZE = 16

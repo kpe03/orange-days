@@ -1,10 +1,11 @@
 import pygame
+import utils.config
 from utils.config import GameState
 from game import Game
 
 pygame.init()
 
-screen = pygame.display.set_mode((1000, 800))
+screen = pygame.display.set_mode((utils.config.SCREEN_WIDTH, utils.config.SCREEN_HEIGHT))
 pygame.display.set_caption("game")
 clock = pygame.time.Clock()
 

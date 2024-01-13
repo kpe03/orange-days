@@ -6,6 +6,7 @@ import utils.config
 
 
 class Spritesheet:
+    #creates a single spritesheet from an image
     def __init__(self, fileName):
         try:
             self.sheet = pygame.image.load(fileName).convert_alpha()
@@ -18,15 +19,15 @@ class Spritesheet:
         self.tile_height = math.floor(self.sheet.get_height() / (utils.config.TILE_SIZE))
         
     def getImage(self, tileNum):
-        image = pygame.Surface([utils.config.TILE_SIZE, utils.config.CHAR_HEIGHT], pygame.SRCALPHA)
+        image = pygame.Surface([utils.config.TILE_SIZE, utils.config.TILE_SIZE], pygame.SRCALPHA)
 
         x = (tileNum % (self.tile_width) * utils.config.TILE_SIZE) 
-        y = (math.floor(tileNum / (self.tile_width))) * (utils.config.TILE_SIZE * 2)
+        y = (math.floor(tileNum / (self.tile_width))) * (utils.config.TILE_SIZE)
         
         #blits the sprite onto new image. image is now a pygame.Rect
-        image.blit(self.sheet, (0, 0), (x, y, utils.config.TILE_SIZE, utils.config.TILE_SIZE * 2))
+        image.blit(self.sheet, (0, 0), (x, y, utils.config.TILE_SIZE, utils.config.TILE_SIZE))
         #image.blit(image, (0, 0))
-        sizedImage = pygame.transform.scale(image, (utils.config.SCALE, utils.config.CH_HEIGHT_SCALE))
+        sizedImage = pygame.transform.scale(image, (utils.config.SCALE, utils.config.SCALE))
 
         return sizedImage
 
@@ -39,33 +40,50 @@ class Spritesheet:
         return list
 
 #for rendering map
-class Map(Spritesheet):
+class Map():
     def __init__(self, fileName, screen):
-        super().__init__(fileName)
-        self.map = []
+        #create a list containing Spritesheet objects
+        self.spritesList = self.loadSprites(
+            ["assets\Tilesets\Fences.png",
+             "assets\Tilesets\Grass.png",
+             "assets\Tilesets\Hills.png",
+             "assets\Tilesets\Tilled_Dirt.png",
+             "assets\Tilesets\Water.png",
+             "assets\Tilesets\Wooden House.png"])
+        self.fileName = fileName #json data
+        self.map = [] 
         self.screen = screen
     
-    #todo: update with json file data
-    def loadMap(self, jsonFile):
-        with open(jsonFile) as map:
-            data = json.load(map)
-            
-    # #put map file into list
-    # def loadMap(self, file):
-    #     with open('utils/maps' + file + '.txt') as map:
-    #         for line in map:
-    #             tiles = []
-    #             for i in range(0, len(line) - 1, 2):
-    #                 tiles.append(line[i])
-    #             self.map.append(tiles)
+    def loadSprites(self, list):
+        spriteList = {}
+        name = ["fences", "grass", "hills", "tilledDirt", "water", "house"]
+        i = 0
+        for sprite in list:
+            #add the sprite with its corresponding name, to the list
+            spriteList[name[i]] = Spritesheet(sprite)
+            i += 1
+        return spriteList
 
-    def renderMap(self, screen):
+    #read data from json, render to screen
+    def loadMap(self):
+        with open(self.fileName) as map:
+            data = json.load(map)
+            #check if grass component
+            if data["water"]:
+                self.map = data["water"]["map"]
+                self.renderMap("water")
+            if data["grass"]:
+                self.map = data["grass"]["map"]
+                self.renderMap("grass")
+                
+
+    def renderMap(self, type):
         ypos = 0
         for line in self.map:
             xpos = 0
-            for tileNum in line:
-                tile = self.getImage(int(tileNum))
+            for tile in line:
+                tile = self.spritesList[type].getImage(tile)
                 rect = pygame.Rect(xpos * utils.config.SCALE, ypos  * utils.config.SCALE, utils.config.SCALE, utils.config.SCALE)
-                screen.blit(tile, rect)
+                self.screen.blit(tile, rect)
                 xpos = xpos + 1
             ypos = ypos + 1
