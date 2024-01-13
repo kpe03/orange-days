@@ -13,6 +13,10 @@ game = Game(screen)
 game.set_up()
 
 while game.game_state == GameState.RUNNING:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+           
     clock.tick(60)
     game.update()
     pygame.display.flip()

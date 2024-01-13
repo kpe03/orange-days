@@ -1,3 +1,5 @@
+import pygame
+import utils.config
 from models.entity import Entity
 from utils.spritesheet import Spritesheet
 
@@ -6,6 +8,8 @@ class Player(Entity):
         super(Player, self).__init__(position, screen)
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animations = self.setUp()
+        self.direction = pygame.math.Vector2()
+        self.status = 'down'
 
     def setUp(self):
         self.walk = {
@@ -21,11 +25,34 @@ class Player(Entity):
             "right": self.sprite.getImage(85)
         }
 
-    #todo:vectors?
-    def updatePosition(self, coords):
-        self.position[0] += coords[0]
-        self.position[1] += coords[1]
-
     #handles input/animation updates
     def update(self):
-        pass
+        self.input() #update input
+        self.move() #move sprite
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            self.direction.y = -1
+            self.status = 'up'
+        elif keys[pygame.K_DOWN]:
+            self.direction.y = 1
+            self.status = 'down'
+        else:
+            self.direction.y = 0
+
+        if keys[pygame.K_RIGHT]:
+            self.direction.x = 1
+            self.status = 'right'
+        elif keys[pygame.K_LEFT]:
+            self.direction.x = -1
+            self.status = 'left'
+        else:
+            self.direction.x = 0
+
+    def move(self, dt):
+        if self.direction.magnitude > 0:
+            self.direction = self.direction.normalize()
+
+        #horizontal movement
+        self.position.x += self.direction.x * utils.config.WALK_SPEED * dt

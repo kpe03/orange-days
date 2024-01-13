@@ -1,7 +1,8 @@
+import pygame
 
 class Entity:
     def __init__(self, position, screen):
-        self.position = position
+        self.position = pygame.math.Vector2()
         self.screen = screen
         self.traits = None
         
