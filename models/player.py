@@ -20,22 +20,22 @@ class Player(Entity):
             "down": Animation(self.sprite.getImageList([13, 16, 19, 22])),
             "right": Animation(self.sprite.getImageList([121, 124, 127, 130])),
             "left": Animation(self.sprite.getImageList([85, 88, 91, 94])),
-            # "up-idle": self.sprite.getImage(49),
-            # "down-idle": self.sprite.getImage(13),
-            # "left-idle": self.sprite.getImage(119),
-            # "right-idle": self.sprite.getImage(85)
+
+            "up-idle": Animation(self.sprite.getImageList([49, 52]), 18),
+            "down-idle": Animation(self.sprite.getImageList([13, 16]), 18),
+            "right-idle": Animation(self.sprite.getImageList([121, 124]), 18),
+            "left-idle": Animation(self.sprite.getImageList([85, 88]), 18)
         }
         return dic
     
     #handles input/animation updates
     def update(self):
         self.input() #update input
+        self.checkStatus()
         self.animation = self.animationsList[self.status]
         self.move() #move sprite
         self.animation.update()
         self.draw()
-        # print(self.position)
-        print(self.status)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -64,6 +64,12 @@ class Player(Entity):
         #horizontal movement
         self.position[0] += self.direction.x * utils.config.WALK_SPEED
         self.position[1] += self.direction.y * utils.config.WALK_SPEED 
+
+    def checkStatus(self):
+        if self.direction.magnitude() == 0:
+            self.status = self.status.split('-')[0] + '-idle'
+            print(self.status)
+       
 
     def draw(self):
         self.screen.blit(self.animation.image, self.position)

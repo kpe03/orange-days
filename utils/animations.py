@@ -1,12 +1,11 @@
 
 class Animation:
-    def __init__(self, images, idleSprite=None, deltaTime=7):
+    def __init__(self, images, deltaTime=7):
         self.images = images
         self.index = 0
         self.timer = 0
         self.image = self.images[self.index]
         self.deltaTime = deltaTime
-        self.idleSprite = idleSprite
         
     #update frames of animation
     def update(self):
@@ -17,6 +16,3 @@ class Animation:
             else:
                 self.index = 0
         self.image = self.images[self.index]
-
-    def idle(self):
-        self.image = self.idleSprite
