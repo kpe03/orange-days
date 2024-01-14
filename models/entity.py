@@ -1,3 +1,4 @@
+import pygame
 
 class Entity:
     def __init__(self, position, screen):
