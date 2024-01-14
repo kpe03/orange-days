@@ -5,13 +5,15 @@ from utils.spritesheet import Spritesheet
 from utils.animations import Animation
 
 class Player(Entity):
-    def __init__(self, position, screen):
-        super(Player, self).__init__(position, screen)
+    def __init__(self, position, screen, group):
+        super(Player, self).__init__(position, screen, group)
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animationsList = self.setUp()
-        self.status = 'down'
+        self.status = 'down-idle'
         self.animation = self.animationsList[self.status]
+        self.image = self.animation.image
         self.direction = pygame.math.Vector2()
+        self.rect = self.image.get_rect()
         
 
     def setUp(self):
@@ -35,7 +37,7 @@ class Player(Entity):
         self.animation = self.animationsList[self.status]
         self.move() #move sprite
         self.animation.update()
-        self.draw()
+        # self.draw()
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -65,11 +67,13 @@ class Player(Entity):
         self.position[0] += self.direction.x * utils.config.WALK_SPEED
         self.position[1] += self.direction.y * utils.config.WALK_SPEED 
 
+        
+
     def checkStatus(self):
         if self.direction.magnitude() == 0:
             self.status = self.status.split('-')[0] + '-idle'
        
 
-    def draw(self):
-        self.screen.blit(self.animation.image, self.position)
+    # def draw(self):
+    #     self.screen.blit(self.animation.image, self.position)
     
