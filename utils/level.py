@@ -33,13 +33,14 @@ class Level:
                 #make a tile object, belonging to all_sprites group
                 #map contains list of spritesheet, so get the corresponding spritesheet
                 #col is the tileNum listed in testmap
+                print(x, y)
                 Tile((x,y), self.all_sprites, self.map.spritesList["water"], col)
 
         for row_index, row in enumerate(GRASS):
             for col_index, col in enumerate(row):
                 x = col_index * utils.config.TILE_SIZE
                 y = row_index * utils.config.TILE_SIZE
-                
+                print(x, y)
                 Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col)
 
     def update(self):
