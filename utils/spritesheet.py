@@ -41,7 +41,7 @@ class Spritesheet:
 
 #for rendering map
 class Map():
-    def __init__(self, fileName, screen):
+    def __init__(self, screen):
         #create a list containing Spritesheet objects
         self.spritesList = self.loadSprites(
             ["assets\Tilesets\Fences.png",
@@ -50,7 +50,6 @@ class Map():
              "assets\Tilesets\Tilled_Dirt.png",
              "assets\Tilesets\Water.png",
              "assets\Tilesets\Wooden House.png"])
-        self.fileName = fileName #json data
         self.map = [] 
         self.screen = screen
     
@@ -64,17 +63,17 @@ class Map():
             i += 1
         return spriteList
 
-    #read data from json, render to screen
-    def loadMap(self):
-        with open(self.fileName) as map:
-            data = json.load(map)
-            #check if grass component
-            if data["water"]:
-                self.map = data["water"]["map"]
-                self.renderMap("water")
-            if data["grass"]:
-                self.map = data["grass"]["map"]
-                self.renderMap("grass")
+    # #read data from json, render to screen
+    # def loadMap(self):
+    #     with open(self.fileName) as map:
+    #         data = json.load(map)
+    #         #check if grass component
+    #         if data["water"]:
+    #             self.map = data["water"]["map"]
+    #             self.renderMap("water")
+    #         if data["grass"]:
+    #             self.map = data["grass"]["map"]
+    #             self.renderMap("grass")
                 
 
     def renderMap(self, type):
@@ -87,3 +86,13 @@ class Map():
                 self.screen.blit(tile, rect)
                 xpos = xpos + 1
             ypos = ypos + 1
+
+# ============
+#   Tile
+# ============
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, sprite, tileNum):
+        super().__init__(groups)
+        self.image = sprite.getImage(tileNum).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.pos = self.rect.topleft
