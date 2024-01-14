@@ -8,27 +8,30 @@ class Player(Entity):
         super(Player, self).__init__(position, screen)
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animations = self.setUp()
+        self.status = 'down-idle'
+        self.image = self.animations[self.status]
         self.direction = pygame.math.Vector2()
-        self.status = 'down'
+        
 
     def setUp(self):
-        self.walk = {
+        dic = {
             "up": self.sprite.getImageList([49, 52, 55, 58]),
             "down": self.sprite.getImageList([13, 16, 19, 22]),
             "left": self.sprite.getImageList([119, 122, 125, 128]),
-            "right": self.sprite.getImageList([85, 88, 91, 94])
+            "right": self.sprite.getImageList([85, 88, 91, 94]),
+            "up-idle": self.sprite.getImage(49),
+            "down-idle": self.sprite.getImage(13),
+            "left-idle": self.sprite.getImage(119),
+            "right-idle": self.sprite.getImage(85)
         }
-        self.idle = {
-            "up": self.sprite.getImage(49),
-            "down": self.sprite.getImage(13),
-            "left": self.sprite.getImage(119),
-            "right": self.sprite.getImage(85)
-        }
-
+        return dic
+    
     #handles input/animation updates
     def update(self):
         self.input() #update input
         self.move() #move sprite
+        self.draw()
+        print(self.position)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -50,9 +53,14 @@ class Player(Entity):
         else:
             self.direction.x = 0
 
-    def move(self, dt):
-        if self.direction.magnitude > 0:
+    def move(self):
+        if self.direction.magnitude() > 0:
             self.direction = self.direction.normalize()
 
         #horizontal movement
-        self.position.x += self.direction.x * utils.config.WALK_SPEED * dt
+        self.position[0] += self.direction.x * utils.config.WALK_SPEED
+        self.position[1] += self.direction.y * utils.config.WALK_SPEED 
+
+    def draw(self):
+        self.screen.blit(self.image, self.position)
+    
