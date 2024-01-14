@@ -21,8 +21,9 @@ class Level:
         
 
     def setUp(self):
+        
+        self.loadMap()
         self.player = Player(utils.config.SCREEN_CENTER, self.screen, self.all_sprites)
-
         
     def loadMap(self):
         for row_index, row in enumerate(WATER):
@@ -42,7 +43,6 @@ class Level:
                 Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col)
 
     def update(self):
-        print(self.player.position)
         self.all_sprites.groupDraw(self.player)
         self.all_sprites.update()
         
@@ -59,4 +59,5 @@ class CameraGroup(pygame.sprite.Group):
 
         for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
-            self.screen.blit(sprite.animation.image, offset_pos)
+            self.screen.blit(sprite.image, offset_pos)
+            

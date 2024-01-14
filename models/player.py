@@ -35,6 +35,7 @@ class Player(Entity):
         self.input() #update input
         self.checkStatus()
         self.animation = self.animationsList[self.status]
+        self.image = self.animation.image
         self.move() #move sprite
         self.animation.update()
         # self.draw()
