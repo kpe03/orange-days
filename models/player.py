@@ -16,10 +16,10 @@ class Player(Entity):
 
     def setUp(self):
         dic = {
-            "up": Animation(self.sprite.getImageList([49, 52, 55, 58])),
-            "down": Animation(self.sprite.getImageList([13, 16, 19, 22])),
-            "right": Animation(self.sprite.getImageList([121, 124, 127, 130])),
-            "left": Animation(self.sprite.getImageList([85, 88, 91, 94])),
+            "up": Animation(self.sprite.getImageList([55, 58]), 18),
+            "down": Animation(self.sprite.getImageList([19, 22]), 18),
+            "right": Animation(self.sprite.getImageList([127, 130]), 18),
+            "left": Animation(self.sprite.getImageList([91, 94]), 18),
 
             "up-idle": Animation(self.sprite.getImageList([49, 52]), 18),
             "down-idle": Animation(self.sprite.getImageList([13, 16]), 18),
@@ -68,7 +68,6 @@ class Player(Entity):
     def checkStatus(self):
         if self.direction.magnitude() == 0:
             self.status = self.status.split('-')[0] + '-idle'
-            print(self.status)
        
 
     def draw(self):
