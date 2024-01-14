@@ -2,8 +2,7 @@ import pygame
 import utils.config
 from utils.maps.testmap import *
 from models.player import Player
-from utils.spritesheet import Map
-from utils.spritesheet import Tile
+from utils.spritesheet import *
 
 #for future:
 #handling loading map, camera, sprites, etc.
@@ -21,27 +20,24 @@ class Level:
         
 
     def setUp(self):
-        
         self.loadMap()
         self.player = Player(utils.config.SCREEN_CENTER, self.screen, self.all_sprites)
         
     def loadMap(self):
         for row_index, row in enumerate(WATER):
             for col_index, col in enumerate(row):
-                x = col_index * utils.config.TILE_SIZE
-                y = row_index * utils.config.TILE_SIZE
+                x = col_index * 64
+                y = row_index * 64
                 #make a tile object, belonging to all_sprites group
                 #map contains list of spritesheet, so get the corresponding spritesheet
                 #col is the tileNum listed in testmap
-                print(x, y)
-                Tile((x,y), self.all_sprites, self.map.spritesList["water"], col)
+                Tile((x,y), self.all_sprites, self.map.spritesList["water"], col, LAYERS['water'])
 
         for row_index, row in enumerate(GRASS):
             for col_index, col in enumerate(row):
-                x = col_index * utils.config.TILE_SIZE
-                y = row_index * utils.config.TILE_SIZE
-                print(x, y)
-                Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col)
+                x = col_index * 64
+                y = row_index * 64
+                Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col, LAYERS['ground'])
 
     def update(self):
         self.all_sprites.groupDraw(self.player)
@@ -58,7 +54,10 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = player.rect.centerx - utils.config.SCREEN_WIDTH / 2
         self.offset.y = player.rect.centery - utils.config.SCREEN_HEIGHT / 2
 
-        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
-            offset_pos = sprite.rect.topleft - self.offset
-            self.screen.blit(sprite.image, offset_pos)
-            
+        for layer in LAYERS.values():
+            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
+                if sprite.z == layer:
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    self.screen.blit(sprite.image, offset_rect)
+                

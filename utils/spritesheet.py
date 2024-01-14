@@ -3,6 +3,7 @@ import json
 
 import math
 import utils.config
+from utils.config import *
 
 
 class Spritesheet:
@@ -91,8 +92,9 @@ class Map():
 #   Tile
 # ============
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, sprite, tileNum):
+    def __init__(self, position, groups, sprite, tileNum, z):
         super().__init__(groups)
         self.image = sprite.getImage(tileNum).convert_alpha()
-        self.rect = self.image.get_rect()
-        self.pos = self.rect.topleft
+        self.rect = self.image.get_rect(topleft = position)
+        self.z = z
+        

@@ -1,4 +1,5 @@
 import pygame
+from utils.config import *
 import utils.config
 from models.entity import Entity
 from utils.spritesheet import Spritesheet
@@ -13,7 +14,8 @@ class Player(Entity):
         self.animation = self.animationsList[self.status]
         self.image = self.animation.image
         self.direction = pygame.math.Vector2()
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(topleft = position)
+        self.z = LAYERS['main']
         
 
     def setUp(self):
