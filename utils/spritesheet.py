@@ -42,7 +42,7 @@ class Spritesheet:
 
 #for rendering map
 class Map():
-    def __init__(self, screen):
+    def __init__(self):
         #create a list containing Spritesheet objects
         self.spritesList = self.loadSprites(
             ["assets\Tilesets\Fences.png",
@@ -51,8 +51,6 @@ class Map():
              "assets\Tilesets\Tilled_Dirt.png",
              "assets\Tilesets\Water.png",
              "assets\Tilesets\Wooden House.png"])
-        self.map = [] 
-        self.screen = screen
     
     def loadSprites(self, list):
         spriteList = {}

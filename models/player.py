@@ -6,15 +6,16 @@ from utils.spritesheet import Spritesheet
 from utils.animations import Animation
 
 class Player(Entity):
-    def __init__(self, position, screen, group):
-        super(Player, self).__init__(position, screen, group)
+    def __init__(self, position, group):
+        super(Player, self).__init__(position, group)
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animationsList = self.setUp()
         self.status = 'down-idle'
         self.animation = self.animationsList[self.status]
         self.image = self.animation.image
         self.direction = pygame.math.Vector2()
-        self.rect = self.image.get_rect(topleft = position)
+        self.rect = self.image.get_rect(center = position)
+        self.position = pygame.math.Vector2(self.rect.center)
         self.z = LAYERS['main']
         
 
@@ -67,8 +68,8 @@ class Player(Entity):
             self.direction = self.direction.normalize()
 
         #horizontal movement
-        self.position[0] += self.direction.x * utils.config.WALK_SPEED
-        self.position[1] += self.direction.y * utils.config.WALK_SPEED 
+        self.position.x += self.direction.x * utils.config.WALK_SPEED
+        self.position.y += self.direction.y * utils.config.WALK_SPEED 
 
         
 
