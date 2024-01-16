@@ -95,4 +95,4 @@ class Tile(pygame.sprite.Sprite):
         self.image = sprite.getImage(tileNum).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
         self.z = z
-        
+        self.type = "tile"

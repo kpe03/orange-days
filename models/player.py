@@ -11,13 +11,14 @@ class Player(Entity):
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animationsList = self.setUp()
         self.status = 'down-idle'
+        self.type = "player"
         self.animation = self.animationsList[self.status]
         self.image = self.animation.image
         self.direction = pygame.math.Vector2()
-        self.rect = self.image.get_rect(center = position)
-        self.position = pygame.math.Vector2(self.rect.center)
+        self.rect = self.image.get_rect()
+        self.position = pygame.math.Vector2(position)
         self.z = LAYERS['main']
-        
+    
 
     def setUp(self):
         dic = {
@@ -37,9 +38,9 @@ class Player(Entity):
     def update(self):
         self.input() #update input
         self.checkStatus()
+        self.move() #move sprite
         self.animation = self.animationsList[self.status]
         self.image = self.animation.image
-        self.move() #move sprite
         self.animation.update()
         # self.draw()
 
