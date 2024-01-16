@@ -20,7 +20,7 @@ class Level:
 
     def setUp(self):
         self.loadMap()
-        self.player = Player(utils.config.SCREEN_CENTER, self.all_sprites)
+        self.player = Player(utils.config.SCREEN_CENTER, self.all_sprites, self.collision_sprites)
         
     def loadMap(self):
         for row_index, row in enumerate(WATER):
@@ -37,6 +37,9 @@ class Level:
                 x = col_index * 64
                 y = row_index * 64
                 Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col, LAYERS['ground'])
+
+        #rock for testing collision
+        Tile((ROCK["x"], ROCK["y"]), [self.all_sprites, self.collision_sprites], self.map.spritesList["hills"], 39)
 
     def update(self):
         self.all_sprites.custom_draw(self.player)

@@ -14,7 +14,7 @@ TILE_SIZE = 16
 SCALE = 64
 
 #speed:
-WALK_SPEED = 1.2
+WALK_SPEED = 3
 RUN_SPEED = 1.5
 
 LAYERS = {

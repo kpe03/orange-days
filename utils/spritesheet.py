@@ -62,19 +62,6 @@ class Map():
             i += 1
         return spriteList
 
-    # #read data from json, render to screen
-    # def loadMap(self):
-    #     with open(self.fileName) as map:
-    #         data = json.load(map)
-    #         #check if grass component
-    #         if data["water"]:
-    #             self.map = data["water"]["map"]
-    #             self.renderMap("water")
-    #         if data["grass"]:
-    #             self.map = data["grass"]["map"]
-    #             self.renderMap("grass")
-                
-
     def renderMap(self, type):
         ypos = 0
         for line in self.map:
@@ -90,9 +77,10 @@ class Map():
 #   Tile
 # ============
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, position, groups, sprite, tileNum, z):
+    def __init__(self, position, groups, sprite, tileNum, z = LAYERS['main']):
         super().__init__(groups)
         self.image = sprite.getImage(tileNum).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
         self.z = z
         self.type = "tile"
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.75)
