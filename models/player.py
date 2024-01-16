@@ -1,25 +1,31 @@
 import pygame
+from utils.config import *
 import utils.config
 from models.entity import Entity
 from utils.spritesheet import Spritesheet
 from utils.animations import Animation
 
 class Player(Entity):
-    def __init__(self, position, screen):
-        super(Player, self).__init__(position, screen)
+    def __init__(self, position, group):
+        super(Player, self).__init__(position, group)
         self.sprite = Spritesheet('assets\Characters\Basic Charakter Spritesheet.png')
         self.animationsList = self.setUp()
-        self.status = 'down'
+        self.status = 'down-idle'
+        self.type = "player"
         self.animation = self.animationsList[self.status]
+        self.image = self.animation.image
         self.direction = pygame.math.Vector2()
-        
+        self.rect = self.image.get_rect()
+        self.position = pygame.math.Vector2(position)
+        self.z = LAYERS['main']
+    
 
     def setUp(self):
         dic = {
-            "up": Animation(self.sprite.getImageList([49, 52, 55, 58])),
-            "down": Animation(self.sprite.getImageList([13, 16, 19, 22])),
-            "right": Animation(self.sprite.getImageList([121, 124, 127, 130])),
-            "left": Animation(self.sprite.getImageList([85, 88, 91, 94])),
+            "up": Animation(self.sprite.getImageList([55, 58]), 18),
+            "down": Animation(self.sprite.getImageList([19, 22]), 18),
+            "right": Animation(self.sprite.getImageList([127, 130]), 18),
+            "left": Animation(self.sprite.getImageList([91, 94]), 18),
 
             "up-idle": Animation(self.sprite.getImageList([49, 52]), 18),
             "down-idle": Animation(self.sprite.getImageList([13, 16]), 18),
@@ -32,10 +38,11 @@ class Player(Entity):
     def update(self):
         self.input() #update input
         self.checkStatus()
-        self.animation = self.animationsList[self.status]
         self.move() #move sprite
+        self.animation = self.animationsList[self.status]
+        self.image = self.animation.image
         self.animation.update()
-        self.draw()
+        # self.draw()
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -62,15 +69,18 @@ class Player(Entity):
             self.direction = self.direction.normalize()
 
         #horizontal movement
-        self.position[0] += self.direction.x * utils.config.WALK_SPEED
-        self.position[1] += self.direction.y * utils.config.WALK_SPEED 
+        self.position.x += self.direction.x * utils.config.WALK_SPEED
+        self.rect.centerx = round(self.position.x)
+        self.position.y += self.direction.y * utils.config.WALK_SPEED 
+        self.rect.centery = round(self.position.y)
+
+        
 
     def checkStatus(self):
         if self.direction.magnitude() == 0:
             self.status = self.status.split('-')[0] + '-idle'
-            print(self.status)
        
 
-    def draw(self):
-        self.screen.blit(self.animation.image, self.position)
+    # def draw(self):
+    #     self.screen.blit(self.animation.image, self.position)
     
