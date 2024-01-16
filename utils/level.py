@@ -23,6 +23,7 @@ class Level:
         self.player = Player(utils.config.SCREEN_CENTER, self.all_sprites, self.collision_sprites)
         
     def loadMap(self):
+        #create water tiles
         for row_index, row in enumerate(WATER):
             for col_index, col in enumerate(row):
                 x = col_index * 64
@@ -32,12 +33,19 @@ class Level:
                 #col is the tileNum listed in testmap
                 Tile((x,y), self.all_sprites, self.map.spritesList["water"], col, LAYERS['water'])
 
+        #create grass tiles
         for row_index, row in enumerate(GRASS):
             for col_index, col in enumerate(row):
                 x = col_index * 64
                 y = row_index * 64
                 Tile((x,y), self.all_sprites, self.map.spritesList["grass"], col, LAYERS['ground'])
 
+        for row_index, row in enumerate(COLLISION):
+            for col_index, col in enumerate(row):
+                x = col_index * 64
+                y = row_index * 64
+                if(col == 1):
+                    CollisionTile((x, y), self.collision_sprites, pygame.Surface((TILE_SIZE, TILE_SIZE)))
         #rock for testing collision
         Tile((ROCK["x"], ROCK["y"]), [self.all_sprites, self.collision_sprites], self.map.spritesList["hills"], 39)
 

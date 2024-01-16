@@ -96,7 +96,7 @@ class Player(Entity):
             #checks if sprite contains attribute hitbox
             if hasattr(sprite, 'hitbox'):
                 if sprite.hitbox.colliderect(self.hitbox):
-                    print("Collision")
+                    
                     if direction == 'horizontal':
                         if self.direction.x > 0:
                             self.hitbox.right = sprite.hitbox.left
