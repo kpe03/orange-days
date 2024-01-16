@@ -50,17 +50,14 @@ class CameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
     def custom_draw(self, player):
-        self.offset.x = player.position.x - utils.config.SCREEN_WIDTH / 2
-        self.offset.y = player.position.y - utils.config.SCREEN_HEIGHT / 2
+        self.offset.x = player.rect.centerx - utils.config.SCREEN_WIDTH / 2
+        self.offset.y = player.rect.centery - utils.config.SCREEN_HEIGHT / 2
 
         for layer in LAYERS.values():
             for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
                 if sprite.z == layer:
-                    if(sprite.type == "player"):
-                        self.screen.blit(sprite.image, player.position)
-                    else:
-                        offset_rect = sprite.rect.copy()
-                        offset_rect.center -= self.offset
-                        self.screen.blit(sprite.image, offset_rect)
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    self.screen.blit(sprite.image, offset_rect)
                     
                 

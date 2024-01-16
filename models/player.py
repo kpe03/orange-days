@@ -70,7 +70,9 @@ class Player(Entity):
 
         #horizontal movement
         self.position.x += self.direction.x * utils.config.WALK_SPEED
+        self.rect.centerx = round(self.position.x)
         self.position.y += self.direction.y * utils.config.WALK_SPEED 
+        self.rect.centery = round(self.position.y)
 
         
 
